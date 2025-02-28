@@ -112,6 +112,7 @@ const RegisterForm = ({user} : {user:User}) =>{
             label="Date of Birth"
             
           />
+
           <CustomFormField 
             fieldType={FormFieldType.SKELETON}
             control={form.control}
@@ -124,12 +125,15 @@ const RegisterForm = ({user} : {user:User}) =>{
                   defaultValue={field.value}
                 >
                   {GenderOptions.map((option) => (
-                    <div key={option}>
+                    <div key={option} className="radio-group">
                       <RadioGroupItem 
                         value={option}
                         id={option}
                       />
-                      <Label>
+                      <Label 
+                        htmlFor={option} 
+                        className="cursor-pointer"
+                      >
                         {option}
                       </Label>
                     </div>
