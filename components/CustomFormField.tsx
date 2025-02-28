@@ -21,6 +21,7 @@
 
   import { FormFieldType } from './forms/PatientForm'
 import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
+import { Textarea } from './ui/textarea';
 
 
 
@@ -72,7 +73,7 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
     case FormFieldType.TEXTAREA:
       return (
         <FormControl>
-          <textarea
+          <Textarea
             placeholder={props.placeholder}
             {...field}
             className="shad-textArea"

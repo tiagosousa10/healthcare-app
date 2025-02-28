@@ -81,7 +81,7 @@ const RegisterForm = ({user} : {user:User}) =>{
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
-          label="Full name"
+          label="Full Name"
           placeholder="Jonh Doe"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
@@ -180,7 +180,7 @@ const RegisterForm = ({user} : {user:User}) =>{
               fieldType={FormFieldType.INPUT}
               control={form.control}
               name="emergencyContactName"
-              label="Emergency contact name"
+              label="Emergency Contact Name"
               placeholder="Guardian's name"
             />
             {/*EMERGENCY CONTACT PHONE */}
@@ -189,7 +189,7 @@ const RegisterForm = ({user} : {user:User}) =>{
               fieldType={FormFieldType.PHONE_INPUT}
               control={form.control}
               name="emergencyContactPhone"
-              label="Emergency contact phone "
+              label="Emergency Contact Phone "
               placeholder="(555) 123-1234"
             />
         </div>
@@ -226,12 +226,69 @@ const RegisterForm = ({user} : {user:User}) =>{
         </CustomFormField>
 
         <div className="flex flex-col gap-6 xl:flex-row">
+          {/*INSURANCE */}
+          <CustomFormField 
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insuranceProvider"
+            label="Insurance Provider"
+            placeholder="BlueCross BlueShield"
+          />
+            {/*INSURANCE POLICY NUMBER */}
 
+          <CustomFormField 
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insurancePolicyNumber"
+            label="Insurance Policy Number"
+            placeholder="ABC123456789"
+          />
         </div>
 
         <div className="flex flex-col gap-6 xl:flex-row">
-
+          {/*ALLERGIES */}
+          <CustomFormField 
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="allergies"
+            label="Allergies (if any)"
+            placeholder="Peanuts, Penicillin, Pollen"
+          />
+            {/*CURRENT MEDICATIONS */}
+          <CustomFormField 
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="currentMedications"
+            label="Current Medications (if any)"
+            placeholder="Ibuprofen 200mg, Paracetamol 500mg"
+          />
         </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          {/*FAMILY MEDICAL HISTORY */}
+          <CustomFormField 
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="familyMedicalHistory"
+            label="Family Medical History"
+            placeholder="Mother had brain cancer, Father had heart disease"
+          />
+            {/*CURRENT MEDICATIONS */}
+          <CustomFormField 
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="pastMedicalHistory"
+            label="Past Medical History"
+            placeholder="Appendectomy, Tonsillectomy"
+          />
+        </div>
+
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">Identification and Verification</h2>
+          </div>
+        </section>
+       
 
         <SubmitButton isLoading={isLoading} >Get Started</SubmitButton>
       </form>
