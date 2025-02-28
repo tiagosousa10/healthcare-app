@@ -20,6 +20,7 @@
   import { Input } from "@/components/ui/input"
 
   import { FormFieldType } from './forms/PatientForm'
+import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
 
 
 
@@ -42,7 +43,7 @@
 
  const RenderInput = ({ field, props }: { field: any, props: CustomProps }) => {
 
-  const {fieldType, iconSrc, iconAlt, placeholder, showTimeSelect, dateFormat, renderSkeleton} = props
+  const {fieldType, iconSrc, iconAlt, placeholder, showTimeSelect, dateFormat, renderSkeleton} = props;
 
   switch (props.fieldType) {
     //INPUT
@@ -125,17 +126,39 @@
           </FormControl>
         </div>
       )
-    
+    //SKELETON
     case FormFieldType.SKELETON:
       return (
         renderSkeleton ? renderSkeleton(field) : null
-      )  
+      ) 
+      //SELECT 
+    case FormFieldType.SELECT:
+      return(
+        <FormControl>
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+          >
+            <FormControl >
+              <SelectTrigger className='shad-select-trigger'>
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+
+            </FormControl>
+
+            <SelectContent className='shad-select-content'>
+              {props.children}
+            </SelectContent>
+
+          </Select>
+        </FormControl>
+      )
     default:
       break;
   }
  }
 
- 
+ // ----- main component -----
  const CustomFormField = (props: CustomProps) => {
   const { control, name, label } = props;
 
