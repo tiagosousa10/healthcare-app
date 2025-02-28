@@ -4,7 +4,8 @@
   import { Control } from 'react-hook-form'
   import Image from 'next/image'
   import { E164Number } from "libphonenumber-js/core";
-  import PhoneInput from 'react-phone-number-input'
+  import PhoneInput from 'react-phone-input-2'
+  import 'react-phone-input-2/lib/style.css'
   import DatePicker from "react-datepicker";
   import "react-datepicker/dist/react-datepicker.css";
 
@@ -83,14 +84,22 @@
       return (
         <FormControl>
           <PhoneInput
-            defaultCountry="US"
+            country="pt"
             placeholder={props.placeholder}
-            international
-            withCountryCallingCode
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
-            className="w-12 text-md border bg-dark-400 placeholder:text-dark-600 border-dark-500 rounded-md "
+            inputStyle={{
+              width: "100%",
+              height: "100%",
+              border: "none",
+              background: "transparent",
+              fontSize: "14px",
+              fontWeight: "500",
+              color: "#fffff",
+            }}
+            inputClass="shad-input "
           />
+          
         </FormControl>
       );
       //DATE PICKER
