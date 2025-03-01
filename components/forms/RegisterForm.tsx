@@ -1,5 +1,6 @@
 "use client"
- 
+
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -7,59 +8,75 @@ import {
   Form,
   FormControl,
 } from "@/components/ui/form"
+import { useRouter } from "next/navigation"
+import { PatientFormValidation, UserFormValidation } from "@/lib/validation"
+import Image from "next/image"
+
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../SubmitButton"
-import { useState } from "react"
-import { UserFormValidation } from "@/lib/validation"
-import { useRouter } from "next/navigation"
-import { createUser } from "@/lib/actions/patient.actions"
 import { FormFieldType } from "./PatientForm"
+import FileUploader from "../FileUploader"
+
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Doctors, GenderOptions, IdentificationTypes } from "@/constants"
 import { Label } from "../ui/label"
 import { SelectItem } from "../ui/select"
-import Image from "next/image"
-import FileUploader from "../FileUploader"
+
+import { createUser, registerPatient } from "@/lib/actions/patient.actions"
+
+import { Doctors, GenderOptions, IdentificationTypes, PatientFormDefaultValues } from "@/constants"
 
 
 const RegisterForm = ({user} : {user:User}) =>{
   const router = useRouter()
   const [isLoading,setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof UserFormValidation>>({
-    resolver: zodResolver(UserFormValidation),
+  // ----- form -----
+  const form = useForm<z.infer<typeof PatientFormValidation>>({ // define the form
+    resolver: zodResolver(PatientFormValidation),
     defaultValues: {
+      ...PatientFormDefaultValues, // Spread PatientFormDefaultValues
       name: "",
       email: "",
       phone: "",
     },
   })
  
-  async function onSubmit({name, email, phone}: z.infer<typeof UserFormValidation>) {
+  // ----- onSubmit -----
+  async function onSubmit(values : z.infer<typeof PatientFormValidation>) {
     setIsLoading(true);
+    let formData;
+
+    if(values.identificationDocument && values.identificationDocument.length > 0) { // if there is a file
+      const blobFile = new Blob([values.identificationDocument[0]], { //to create a blob from the file
+        type: values.identificationDocument[0].type, //set the type to the file type
+      })
+
+      formData = new FormData();
+      formData.append('blobFile', blobFile)
+      formData.append('fileName', values.identificationDocument[0].name)
+    }
 
     try {
-      const userData = {
-        name,
-        email,
-        phone,
-      }
-      const user = await createUser(userData)
+     const patientData = {
+       ...values,
+       userId: user.$id,
+       birthDate: new Date(values.birthDate),
+       identificationDocument: formData, // we created above
+     }
+     // @ts-ignore
+     const patient = await registerPatient(patientData)
 
-      if(user) router.push(`/patients/${user.$id}/register`)
-
+     if(patient) router.push(`/patients/${user.$id}/new-appointment`)
 
     } catch(error) {
-      console.log('entrei no catch.')
-
       console.log(error)
-
     } 
 
     setIsLoading(false)
   }
 
   
+// ----- main component -----
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12 flex-1 ">
@@ -120,7 +137,6 @@ const RegisterForm = ({user} : {user:User}) =>{
             
           />
           {/*SKELETON- GENDER */}
-
           <CustomFormField 
             fieldType={FormFieldType.SKELETON}
             control={form.control}
