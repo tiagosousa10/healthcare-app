@@ -15,10 +15,11 @@ import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.actions"
 import { FormFieldType } from "./PatientForm"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Doctors, GenderOptions } from "@/constants"
+import { Doctors, GenderOptions, IdentificationTypes } from "@/constants"
 import { Label } from "../ui/label"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
+import FileUploader from "../FileUploader"
 
 
 const RegisterForm = ({user} : {user:User}) =>{
@@ -288,7 +289,46 @@ const RegisterForm = ({user} : {user:User}) =>{
             <h2 className="sub-header">Identification and Verification</h2>
           </div>
         </section>
+
+        {/*IDENTIFICATION TYPE */}
+        <CustomFormField 
+              fieldType={FormFieldType.SELECT}
+              control={form.control}
+              name="identificationType"
+              label="Identification Type"
+              placeholder="Select an identification type"
+        >
+          {IdentificationTypes.map((type) => (
+            <SelectItem key={type} value={type} >
+              {type}
+            </SelectItem>
+          ))}
+        </CustomFormField>
+
+               {/*IDENTIFICATION NUMBER */}
+        <CustomFormField 
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="identificationNumber"
+          label="Identification Number"
+          placeholder="123456789"
+        />
        
+        {/*SKELETON- GENDER */}
+
+        <CustomFormField 
+            fieldType={FormFieldType.SKELETON}
+            control={form.control}
+            name="identificationNumber"
+            label="Scanned copy of identification document"
+            renderSkeleton={(field) => (
+              <FormControl>
+                <FileUploader 
+                  
+                />
+              </FormControl>
+            )}            
+          />
 
         <SubmitButton isLoading={isLoading} >Get Started</SubmitButton>
       </form>
