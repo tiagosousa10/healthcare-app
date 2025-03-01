@@ -89,7 +89,7 @@ const RegisterForm = ({user} : {user:User}) =>{
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Personal Information </h2>
           </div>
-          
+          identificationNumber
         </section>
 
           {/*FULL NAME */}
@@ -333,7 +333,7 @@ const RegisterForm = ({user} : {user:User}) =>{
         <CustomFormField 
             fieldType={FormFieldType.SKELETON}
             control={form.control}
-            name="identificationNumber"
+            name="identificationDocument"
             label="Scanned copy of identification document"
             renderSkeleton={(field) => (
               <FormControl>
