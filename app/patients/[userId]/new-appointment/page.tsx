@@ -5,7 +5,7 @@ import Image from "next/image";
 
 
 export default async function NewAppointment({params : {userId}} : SearchParamProps) {
-   const patient = await getPatient(userId)
+   const patient = await getPatient(userId) // get patient
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -21,10 +21,11 @@ export default async function NewAppointment({params : {userId}} : SearchParamPr
           
           <AppointmentForm 
             type="create"
-            id={userId}
+            userId={userId}
+            patientId={patient.$id}
           />
 
-         <p className="justify-items-end text-dark-600 xl:text-left">© 2025 Carepulse</p>
+         <p className="copyright mt-10 py-12">© 2025 Carepulse</p>
            
         </div>
       </section>
