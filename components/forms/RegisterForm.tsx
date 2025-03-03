@@ -31,6 +31,7 @@ const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
+  //----- form -----
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
@@ -42,9 +43,9 @@ const RegisterForm = ({ user }: { user: User }) => {
     },
   });
 
+//----- onSubmit -----
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
-
     // Store file info in form data as
     let formData;
     if (
@@ -99,6 +100,9 @@ const RegisterForm = ({ user }: { user: User }) => {
     setIsLoading(false);
   };
 
+
+
+  // ----- main jsx -----
   return (
     <Form {...form}>
       <form
