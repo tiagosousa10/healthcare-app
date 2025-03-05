@@ -34,7 +34,6 @@ const AppointmentForm = ({
 
   const AppointmentFormValidation = getAppointmentSchema(type)
 
-  console.log('appointment primary physician',appointment?.primaryPhysician)
 
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
    resolver: zodResolver(AppointmentFormValidation),
@@ -85,7 +84,6 @@ const AppointmentForm = ({
             router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`)
          }
       } else {
-
          const appointmentToUpdate = {
             userId,
             appointmentId: appointment?.$id!,
