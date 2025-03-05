@@ -5,6 +5,7 @@ import { APPOINTMENT_COLLECTION_ID, DATABASE_ID, databases } from "../appwrite.c
 import { parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite.types";
 import { parse } from "path";
+import { revalidatePath } from "next/cache";
 
 export const createAppointment =  async(appointment: CreateAppointmentParams) => {
    try {
@@ -73,5 +74,29 @@ export const getRecentAppointmentList = async() => {
 
    } catch(error) {
       console.log(error)
+   }
+}
+
+export const updateAppointment = async ({appointmentId, userId, appointment, type} : UpdateAppointmentParams) => {
+   try {
+
+      const updatedAppointment = await databases.updateDocument( 
+         DATABASE_ID!,
+         APPOINTMENT_COLLECTION_ID!,
+         appointmentId,
+         appointment // { status: "scheduled" }
+      )
+
+      if(!updateAppointment) {
+         throw new Error('Failed to update appointment')
+      }
+
+      //SMS notification
+
+      revalidatePath('/admin') // revalidate the admin page
+      return parseStringify(updatedAppointment)
+      
+   } catch(error) {
+      console.log('updateAppointment error: ',error)
    }
 }
