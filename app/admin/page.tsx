@@ -6,10 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import {columns, Payment} from '@/components/table/columns'
 
-const Admin = async () => {
-
-  const appointments = await getRecentAppointmentList()
-  async function getData(): Promise<Payment[]> {
+async function getData(): Promise<Payment[]> {
    // Fetch data from your API here.
    return [
      {
@@ -22,6 +19,11 @@ const Admin = async () => {
    ]
  }
 
+
+const Admin = async () => {
+   const data = await getData()
+  const appointments = await getRecentAppointmentList()
+  
 
   return (
     <div className='mx-auto flex max-w-7xl flex-col space-y-14'>
@@ -68,9 +70,13 @@ const Admin = async () => {
             />
          </section>
 
-         <DataTable 
+         {/* <DataTable 
             columns={columns}
             data={appointments.documents}
+         /> */}
+         <DataTable 
+            columns={columns}
+            data={data}
          />
       </main>
     </div>
