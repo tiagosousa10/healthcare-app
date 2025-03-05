@@ -17,12 +17,13 @@ import {InputFile} from 'node-appwrite'
 
 export const createUser = async (user: CreateUserParams) => {
    try {
+    const formattedPhone = `+${user.phone.replace(/\D+/g, '').slice(0, 15)}`;
      // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
      console.log('user-> ',user)
      const newuser = await users.create(
        ID.unique(),
        user.email,
-       user.phone,
+       formattedPhone,
        undefined,
        user.name
      );

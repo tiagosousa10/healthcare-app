@@ -87,7 +87,7 @@ import { Checkbox } from './ui/checkbox';
       return (
         <FormControl>
           <PhoneInput
-            country="pt"
+            country="us"
             placeholder={props.placeholder}
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
