@@ -1,7 +1,6 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { ColumnDef } from "@tanstack/react-table" 
 import { MoreHorizontal } from "lucide-react"
 import { Button } from "../ui/button"
 import StatusBadge from "../StatusBadge"
@@ -75,10 +74,22 @@ export const columns: ColumnDef<Payment>[] = [
    {
       id: "actions",
       header: () => <div className="pl-4">Actions</div>,
-      cell: ({ row }) => {
+      cell: ({ row : {original: data} }) => {
          return(
             <div className="flex gap-1">
-               <AppointmentModal />
+               <AppointmentModal
+                  type="schedule"
+                  patientId={data.patient.$id}
+                  userId={data.userId}
+                  appointmentId={data.$id}
+               />
+               <AppointmentModal
+                  type="cancel"
+                  patientId={data.patient.$id}
+                  userId={data.userId}
+                  appointment={data.$id}
+               />
+               
             </div>
          )
       }, 
