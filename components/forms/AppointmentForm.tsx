@@ -34,18 +34,18 @@ const AppointmentForm = ({
 
   const AppointmentFormValidation = getAppointmentSchema(type)
 
+  console.log('appointment primary physician',appointment?.primaryPhysician)
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
-    resolver: zodResolver(AppointmentFormValidation),
-    defaultValues: {
-      primaryPhysician: appointment && appointment.primaryPhysician,
-      schedule: appointment ? new Date(appointment.schedule) : new Date(),
-      reason: appointment ? appointment.reason : '',
-      note: appointment ? appointment.note : '',
-      cancellationReason: appointment ? appointment.cancellationReason : '',
-    },
-  })
+   resolver: zodResolver(AppointmentFormValidation),
+   defaultValues: {
+     primaryPhysician: appointment ? appointment?.primaryPhysician : "",
+     schedule: appointment ? new Date(appointment?.schedule) : new Date(),
+     reason: appointment ? appointment?.reason : "",
+     note: appointment?.note || "",
+     cancellationReason: appointment?.cancellationReason || "",
+   },
+ });
  
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
