@@ -63,6 +63,7 @@ const Admin = async () => {
             columns={columns}
             data={appointments.documents}
          />
+         
         
       </main>
     </div>
