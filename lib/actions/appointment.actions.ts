@@ -77,44 +77,52 @@ export const getRecentAppointmentList = async() => {
    }
 }
 
-export const updateAppointment = async ({appointmentId, userId, appointment, type} : UpdateAppointmentParams) => {
+//  SEND SMS NOTIFICATION
+export const sendSMSNotification = async (userId: string, content: string) => {
    try {
-
-      const updatedAppointment = await databases.updateDocument( 
-         DATABASE_ID!,
-         APPOINTMENT_COLLECTION_ID!,
-         appointmentId,
-         appointment // { status: "scheduled" }
-      )
-
-      if(!updateAppointment) {
-         throw new Error('Failed to update appointment')
-      }
-
-      //SMS notification
-      const smsMessage = `
-      Hi, its Carepulse.
-      ${type === 'schedule' 
-         ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!)}` 
-         : `We regret to inform you that your appointment has been cancelled. Reason: ${appointment.cancellationReason}` 
-      }`
-
-      await sendSMSNotification(userId, smsMessage)
-
-      revalidatePath('/admin') // revalidate the admin page
-      return parseStringify(updatedAppointment)
-      
-   } catch(error) {
-      console.log('updateAppointment error: ',error)
+     // https://appwrite.io/docs/references/1.5.x/server-nodejs/messaging#createSms
+     const message = await messaging.createSms(
+       ID.unique(),
+       content,
+       [],
+       [userId]
+     );
+     return parseStringify(message);
+   } catch (error) {
+     console.error("An error occurred while sending sms:", error);
    }
-}
-
-export const sendSMSNotification = async (userId: string, content:string) => {
+ };
+ 
+ //  UPDATE APPOINTMENT
+ export const updateAppointment = async ({
+   appointmentId,
+   userId,
+   timeZone,
+   appointment,
+   type,
+ }: UpdateAppointmentParams) => {
    try {
-      const message = await messaging.createSms(ID.unique(), content, [], [userId])
+     // Update appointment to scheduled -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#updateDocument
+     const updatedAppointment = await databases.updateDocument(
+       DATABASE_ID!,
+       APPOINTMENT_COLLECTION_ID!,
+       appointmentId,
+       appointment
+     );
+ 
+     if (!updatedAppointment) throw Error;
+ 
+     const smsMessage = 
+      `Greetings from CarePulse. ${type === "schedule"
+         ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!, timeZone).dateTime} with Dr. ${appointment.primaryPhysician}`
+         : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!, timeZone).dateTime} is cancelled. Reason:  ${appointment.cancellationReason}`}.`;
 
-      return parseStringify(message)
-   } catch(error) {
-     console.log(error) 
+     await sendSMSNotification(userId, smsMessage);
+ 
+     revalidatePath("/admin");
+     return parseStringify(updatedAppointment);
+     
+   } catch (error) {
+     console.error("An error occurred while scheduling an appointment:", error);
    }
-}
+ };
